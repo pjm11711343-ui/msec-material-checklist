@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0a1220;
+  --color-navy-2: #131d30;
+  --color-navy-3: #1d2a42;
+  --color-amber: #e8a33d;
+  --color-amber-soft: #fbefd9;
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, -apple-system, "Malgun Gothic", sans-serif;
+}
+
+html, body, #root { height: 100%; }
+body { background: #eef1f5; color: #0f172a; font-size: 13px; }
+
+.card { @apply bg-white rounded-2xl border border-slate-200; }
+.btn { @apply inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-[12px] hover:bg-slate-50 active:scale-[.98] transition disabled:opacity-40; }
+.btn-amber { @apply inline-flex items-center gap-1 rounded-lg bg-amber px-3 py-1 text-[12px] font-semibold text-navy hover:brightness-95 active:scale-[.98] transition disabled:opacity-40; }
+.inp { @apply rounded-md border border-slate-300 bg-white px-2 py-1 text-[12px] outline-none focus:border-amber focus:ring-2 focus:ring-amber/30; }
+.lbl { @apply text-[11px] font-semibold text-slate-500; }
+
+@keyframes pop { 0% { transform: scale(.6) } 70% { transform: scale(1.15) } 100% { transform: scale(1) } }
+.pop { animation: pop .22s ease-out; }
+
+@media print {
+  @page { size: A4 landscape; margin: 8mm; }
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .print-full { overflow: visible !important; height: auto !important; }
+}
