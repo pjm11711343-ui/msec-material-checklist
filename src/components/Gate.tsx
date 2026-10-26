@@ -91,8 +91,17 @@ export function Setup({ existing, onDone, onCancel }: { existing: AuthFile | nul
       const app = { owner: f.owner, repo: f.appRepo, branch: f.branch }
       const data = { owner: f.owner, repo: f.dataRepo, branch: f.branch }
       add('저장소 권한 확인 중…')
-      const ai = await gh.repoInfo(app)
-      const di = await gh.repoInfo(data)
+      const check = async (r: typeof app, label: string) => {
+        try { return await gh.repoInfo(r) } catch (e: any) {
+          if (String(e.message).includes('404'))
+            throw new Error(`${label} '${r.owner}/${r.repo}'에 접근할 수 없습니다. ① 계정·저장소 이름 철자 ② 토큰 발급 시 Repository access에서 이 저장소를 선택했는지 확인하세요.`)
+          throw e
+        }
+      }
+      const ai = await check(app, '프로그램 저장소')
+      add('프로그램 저장소 확인 완료')
+      const di = await check(data, '데이터 저장소')
+      add('데이터 저장소 확인 완료')
       if (!ai.push || !di.push) throw new Error('토큰에 저장소 쓰기(Contents: Read and write) 권한이 없습니다.')
       if (!di.private && f.appRepo !== f.dataRepo) add('주의: 데이터 저장소가 공개(public)입니다. 비공개(private)를 권장합니다.')
       const authPath = 'public/auth.json'
